@@ -1,17 +1,16 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
-// import hiber.models.User;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-// import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
-
-// import java.util.ArrayList;
-// import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -25,20 +24,24 @@ public class UserController {
 
 	@GetMapping
 	public String printWelcome(Model model) {
-		userService.create(new User("user1", "user", 0, "user"));
+		userService.create(new User("user2", "user", 0, "user"));
+		List<String> roles = new ArrayList<>();
+		roles.add("ROLE_USER");
+		userService.setUserRoles((long) 1, roles);
 		return "index";
 	}
 
-	// @GetMapping(value = "/new")
-	// public String newUser(@ModelAttribute("user") User user) {
-	// 	return "/new";
-	// }
+	@GetMapping(value = "/new")
+	public String newUser(@ModelAttribute("user") User user) {
+		return "/new";
+	}
 
-	// @PostMapping()
-	// public String addUser(@ModelAttribute("user") User user) {
-	// 	userService.create(user);
-	// 	return "redirect:/";
-	// }
+	@PostMapping()
+	public String addUser(@ModelAttribute("user") User user) {
+		userService.create(user);
+		return "redirect:/";
+	}
+	
 
 	// @GetMapping(value = "/{id}/update")
 	// public String updateUser(@PathVariable("id") long id, Model model) {

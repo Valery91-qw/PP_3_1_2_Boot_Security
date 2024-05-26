@@ -10,4 +10,5 @@ public interface UserService {
     void update(User user);
     void delete(User user);
     List<User> listUsers();
+    void setUserRoles(Long userId,List<String> roles);
 }

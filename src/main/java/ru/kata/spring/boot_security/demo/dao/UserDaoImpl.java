@@ -28,11 +28,13 @@ public class UserDaoImpl implements UserDao {
       return user;
    }
 
+   @Transactional
    @Override
    public void update(User user) {
       entityManager.merge(user);
    }
 
+   @Transactional
    @Override
    public void delete(User user) {
       user = entityManager.merge(user);
@@ -59,4 +61,11 @@ public class UserDaoImpl implements UserDao {
       return Optional.ofNullable(user);
    }
 
+   @Transactional
+   @Override
+   public void setUserRoles(Long userId, List<String> roles) {
+      User user = get(userId);
+      user.setRoles(roles);
+      update(user);
+   }
 }

@@ -12,4 +12,5 @@ public interface UserDao {
    void delete(User user);
    List<User> listUsers();
    Optional<User> loadUserByUsername(String username);
+   void setUserRoles(Long userId, List<String> roles);
 }

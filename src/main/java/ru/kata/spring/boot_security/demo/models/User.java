@@ -1,6 +1,10 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
+
 
 @Entity
 @Table(name = "users")
@@ -22,6 +26,14 @@ public class User {
 
    @Column(name = "password")
    private String password;
+
+   @ManyToMany (cascade = { CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
+   @JoinTable(
+      name = "user_roles", 
+      joinColumns = @JoinColumn(name = "user_id"), 
+      inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+   private List<Roles> roles = new ArrayList<>();
 
    public User() {}
    
@@ -70,5 +82,17 @@ public class User {
 
    public void setPassword(String password) {
       this.password = password;
+   }
+
+   public List<Roles> getRoles() {
+      return roles;
+   }
+
+   public void setRoles(List<String> roles) {
+      List<Roles> modelRoles = new ArrayList<>();
+      for(String role: roles) {
+         modelRoles.add(new Roles(role));
+      }
+      this.roles = modelRoles;
    }
 }

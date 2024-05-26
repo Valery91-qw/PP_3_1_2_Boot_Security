@@ -45,4 +45,9 @@ public class UserServiceImpl implements UserService {
    public List<User> listUsers() {
       return this.userDaoImpl.listUsers();
    }
+
+   @Override
+   public void setUserRoles(Long userId ,List<String> roles) {
+      this.userDaoImpl.setUserRoles(userId ,roles);
+   }
 }

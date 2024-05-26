@@ -5,7 +5,12 @@
 </head>
 <body>
 <h1>User, welcome spring boot security page!</h1>
+<div sec:authentication="${#authentication.principal.id}"></div>
 
-
+<div sec:authorize="isAuthenticated()">
+    <form  th:action="@{/logout}" method="post">
+        <input type="submit" value="Выйти">
+    </form>
+</div>
 </body>
 </html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new user</title>
+</head>
+<body>
+<h1>Create your account</h1>
+
+<form style="display: flex; flex-direction: column; max-width: 25%; margin-left: 15%;" th:method="post" th:action="@{/}" th:object="${user}">
+    <label for="name">set Name:</label>
+    <input th:field="*{name}" id="name" type="text">
+
+    <label for="lastName">set lastName:</label>
+    <input th:field="*{lastName}" id="lastName" type="text">
+
+    <label for="age">set Age:</label>
+    <input th:field="*{age}" id="age" type="number">
+
+    <label for="roles">Set role (if you want)</label>
+    <input th:field="*{roles}" id="roles" type="text">
+
+    </br>
+
+    <input type="submit" value="create user">
+</form>
+
+</body>
+</html>
