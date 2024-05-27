@@ -4,14 +4,10 @@
     <title>Spring Security Example</title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
-<div style="display: flex; flex-direction: column;">
-    <h4 >Your profile is: </h4>
-    <h3 th:text="${user.name}"></h3>
-    <h3 th:text="${user.lastName}"></h3>
-    <span th:text="${user.age}"></span>
+<h1>Welcome to the admin page</h1>
+<div>
+    <span>You can view all users <a th:href="@{/admin/users}">Tap to Link</a> </span>
 </div>
-
 <div th:insert="~{/quitBtn.html :: quitBtn}"></div>
 </body>
 </html>

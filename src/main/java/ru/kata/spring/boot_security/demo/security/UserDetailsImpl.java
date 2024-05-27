@@ -62,7 +62,7 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
-    User getUser() {
+    public User getUser() {
         return this.user;
     }
 }

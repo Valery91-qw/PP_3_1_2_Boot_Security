@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Spring Security Example</title>
+</head>
+<body>
+<h1>Welcome to the admin page</h1>
+<div>
+    <div class="main">
+        <div th:each="user : ${users}">
+            <span th:text="${user.getId()}">userID</span>
+            <h5 th:text="${user.getName()}">
+                userName
+            </h5>
+            <span th:text="${user.getLastName()}">
+                userLastName
+            </span>
+            <span th:text="${user.getAge()}">
+            </span>
+
+            <a th:href="@{/admin/users/{id}/update(id=${user.getId()})}" >update user</a>
+            <a th:unless="${user.getId() == currentUser}" th:href="@{/admin/users/{id}/delete(id=${user.getId()})}">delete user</a>
+
+            </div>
+        </div>
+        <a th:href="@{/new}">create user</a>
+</div>
+<div th:insert="~{/quitBtn.html :: quitBtn}"></div>
+</body>
+</html>
