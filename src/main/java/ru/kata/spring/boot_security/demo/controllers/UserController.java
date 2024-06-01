@@ -11,6 +11,8 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.security.UserDetailsImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/")
@@ -23,7 +25,7 @@ public class UserController {
 	}
 
 	@GetMapping
-	public String printWelcome(Model model) {
+	public String printWelcome() {
 		return "index";
 	}
 
@@ -48,7 +50,7 @@ public class UserController {
 
 	@GetMapping("/admin")
 	public String getMethodName() {
-		return "admin";
+		return "/admin";
 	}
 	
 	

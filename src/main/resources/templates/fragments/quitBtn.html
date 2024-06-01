@@ -1,8 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <body>
-    <div th:fragment="quitBtn" style="margin-top: 10px;" sec:authorize="isAuthenticated()">
+    <div th:fragment="quitBtn" sec:authorize="isAuthenticated()">
         <form  th:action="@{/logout}" method="post">
-            <input type="submit" value="Выйти">
+            <input type="submit" value="Выйти" class="btn btn-dark">
         </form>
     </div>
   </body>

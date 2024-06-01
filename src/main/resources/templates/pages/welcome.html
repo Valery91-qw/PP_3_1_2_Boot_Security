@@ -1,0 +1,18 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>    
+  <div style="margin-left: 5%;" th:fragment="welcome">
+    <h1>Welcome to Index Spring boot CRUD app</h1>
+    <div>
+        <span>You can create a new account: 
+            </br><a th:href="@{/new}">Tap to link</a>
+        </span>
+    </div>
+    </br>
+        <div>
+            <span>Or you can use your existing account:
+            </br><a th:href="@{/login}">Tap to link</a>
+            </span>
+        </div>
+    </div>
+</body>
+</html>

@@ -2,19 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Spring Security Example</title>
+
+    <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+
 </head>
-<body>
-<h1>Welcome to Index Spring boot CRUD app</h1>
-<div>
-    <span>You can create a new account: 
-        </br><a th:href="@{/new}">Tap to link</a>
-    </span>
-</div>
-</br>
-<div>
-    <span>Or you can use your existing account:
-        </br><a th:href="@{/login}">Tap to link</a>
-    </span>
-</div>
+<body class="bg-light">
+    <header th:replace="~{/fragments/header.html :: header}"></header>
+    <!-- <span th:text="${user.name}"></span> -->
+    <main class="d-flex">
+        <div th:insert="~{/fragments/sidebar.html :: sidebar}"></div>
+        <div th:insert="~{/pages/welcome.html :: welcome}"> </div>
+        <!-- <div th:insert="~{/fragments/quitBtn.html :: quitBtn}"></div> -->
+    </main>
 </body>
 </html>
