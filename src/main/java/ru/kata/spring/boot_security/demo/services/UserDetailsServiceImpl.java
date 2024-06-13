@@ -22,13 +22,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional =  this.userDaoImpl.loadUserByUsername(username);
-        
-        if(userOptional.isEmpty()) {
+        Optional<User> userOptional = this.userDaoImpl.loadUserByUsername(username);
+
+        if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User not found with such name: " + username);
         }
 
         return new UserDetailsImpl(userOptional.get());
     }
-    
+
 }

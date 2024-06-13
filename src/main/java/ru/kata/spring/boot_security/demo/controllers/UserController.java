@@ -1,27 +1,16 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.resource.HttpResource;
 
-import ru.kata.spring.boot_security.demo.models.Roles;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.security.UserDetailsImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
-
 
 @Controller
 @RequestMapping("/")
@@ -40,15 +29,15 @@ public class UserController {
 		userService.create(user);
 		return "redirect:/admin";
 	}
-	
+
 	@GetMapping("/user")
 	public String getMethodName(Authentication authentication, Model model) {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
 		User user = userDetailsImpl.getUser();
-		model.addAttribute("user", user); 
+		model.addAttribute("user", user);
 		return "/index";
 	}
-	
+
 	@GetMapping("/admin")
 	public String getMethodName(Model model, Authentication authentication, @ModelAttribute("user") User user) {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
@@ -58,7 +47,7 @@ public class UserController {
 		model.addAttribute("currentUser", currentUser.getId());
 		return "/index";
 	}
-	
+
 	@GetMapping(value = "/admin/users/{id}/update")
 	public String updateUser(@PathVariable("id") long id, Model model) {
 		User user = userService.get(id);
