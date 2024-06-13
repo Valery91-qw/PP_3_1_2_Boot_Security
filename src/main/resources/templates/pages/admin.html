@@ -1,7 +1,58 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<body>    
-    <div style="margin-left: 5%;" th:fragment="admin">
-        <h1>Admin</h1>
+
+<body>
+  <div th:fragment="admin" class="d-flex flex-column w-100">
+    <h1 class="py-3">Admin panel</h1>
+    <!-- Nav -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button"
+          role="tab" aria-controls="users" aria-selected="true">Users</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="form-tab" data-bs-toggle="tab" data-bs-target="#form" type="button" role="tab"
+          aria-controls="form" aria-selected="false">New Users</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <!-- Table -->
+      <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+        <table class="table table-bordered table-dark">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Last name</th>
+              <th scope="col">Age</th>
+              <th scope="col">Roles</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="user : ${users}">
+              <th scope="row" th:text="${user.id}"></th>
+              <td th:text="${user.name}"></td>
+              <td th:text="${user.lastName}"></td>
+              <td th:text="${user.age}"></td>
+              <td>
+                <span style="margin-left: 5px;" th:each="role: ${user.roles}"
+                  th:text="${role.name.replaceFirst('ROLE_', '')}"></span>
+              </td>
+              <td>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                  Edit
+                </button>
+              </td>
+              <td><button type="button">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <th:block th:replace="~{/fragments/form.html :: form}"></th:block>
+      <th:block th:replace="~{/fragments/modal.html :: modal}"></th:block>
     </div>
+  </div>
 </body>
+
 </html>

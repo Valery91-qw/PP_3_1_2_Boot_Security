@@ -1,17 +1,26 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.resource.HttpResource;
 
+import ru.kata.spring.boot_security.demo.models.Roles;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.security.UserDetailsImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -24,20 +33,12 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	@GetMapping
-	public String printWelcome() {
-		return "index";
-	}
-
-	@GetMapping(value = "/new")
-	public String newUser(@ModelAttribute("user") User user) {
-		return "/new";
-	}
-
 	@PostMapping()
-	public String addUser(@ModelAttribute("user") User user) {
+	public String addUser(@ModelAttribute("user") User user, @RequestBody MultiValueMap<String, String> formData) {
+		List<String> role = formData.get("role");
+		user.setRoles(role);
 		userService.create(user);
-		return "redirect:/";
+		return "redirect:/admin";
 	}
 	
 	@GetMapping("/user")
@@ -45,23 +46,17 @@ public class UserController {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
 		User user = userDetailsImpl.getUser();
 		model.addAttribute("user", user); 
-		return "/user";
+		return "/index";
 	}
-
+	
 	@GetMapping("/admin")
-	public String getMethodName() {
-		return "/admin";
-	}
-	
-	
-	@GetMapping("/admin/users")
-	public String getMethodName(Model model, Authentication authentication) {
+	public String getMethodName(Model model, Authentication authentication, @ModelAttribute("user") User user) {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
-		User user = userDetailsImpl.getUser();
+		User currentUser = userDetailsImpl.getUser();
 		List<User> users = userService.listUsers();
 		model.addAttribute("users", users);
-		model.addAttribute("currentUser", user.getId());
-		return "/users";
+		model.addAttribute("currentUser", currentUser.getId());
+		return "/index";
 	}
 	
 	@GetMapping(value = "/admin/users/{id}/update")
