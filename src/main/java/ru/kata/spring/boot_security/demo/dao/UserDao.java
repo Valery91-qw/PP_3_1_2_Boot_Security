@@ -7,10 +7,16 @@ import ru.kata.spring.boot_security.demo.models.User;
 
 public interface UserDao {
    void add(User user);
+
    User get(Long id);
+
    void update(User user);
+
    void delete(User user);
+
    List<User> listUsers();
+
    Optional<User> loadUserByUsername(String username);
+
    void setUserRoles(Long userId, List<String> roles);
 }

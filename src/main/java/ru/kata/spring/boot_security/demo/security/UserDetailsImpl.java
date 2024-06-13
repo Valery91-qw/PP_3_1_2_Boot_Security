@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.kata.spring.boot_security.demo.models.Roles;
 import ru.kata.spring.boot_security.demo.models.User;
 
-
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
@@ -25,7 +24,7 @@ public class UserDetailsImpl implements UserDetails {
         List<GrantedAuthority> roles = new ArrayList<>();
         List<Roles> userRoles = user.getRoles();
 
-        for(Roles userRole: userRoles) {
+        for (Roles userRole : userRoles) {
             roles.add(new SimpleGrantedAuthority(userRole.getName()));
         }
 
@@ -41,7 +40,7 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return this.user.getName();
     }
-    
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

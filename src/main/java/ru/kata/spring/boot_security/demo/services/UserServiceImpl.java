@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
    @Override
    @Transactional
    public void update(User user) {
-       this.userDaoImpl.update(user);
+      this.userDaoImpl.update(user);
    }
 
    @Override
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
    }
 
    @Override
-   public void setUserRoles(Long userId ,List<String> roles) {
-      this.userDaoImpl.setUserRoles(userId ,roles);
+   public void setUserRoles(Long userId, List<String> roles) {
+      this.userDaoImpl.setUserRoles(userId, roles);
    }
 }

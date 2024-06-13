@@ -6,9 +6,14 @@ import ru.kata.spring.boot_security.demo.models.User;
 
 public interface UserService {
     void create(User user);
+
     User get(long id);
+
     void update(User user);
+
     void delete(User user);
+
     List<User> listUsers();
-    void setUserRoles(Long userId,List<String> roles);
+
+    void setUserRoles(Long userId, List<String> roles);
 }
