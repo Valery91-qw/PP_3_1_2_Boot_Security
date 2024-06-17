@@ -27,6 +27,24 @@
             const currForm = document.getElementById("editForm")
             currForm.setAttribute("action", "/admin/" + user.id + "/edit");
         }
+
+        function deleteCurrentUser(user) {
+            console.log(user);
+            const myModal = document.getElementById("deleteModalCenter");
+            myModal.addEventListener("shown.bs.modal", function (event) {
+                const allInputs = myModal.querySelectorAll("input");
+                for (let i = 1; i < allInputs.length; i++) {
+                    const id = allInputs[i].getAttribute("id");
+                    if (id.includes("ROLE")) {
+                        allInputs[i].value = allInputs[i].id;
+                    } else {
+                        allInputs[i].value = user[id];
+                    }
+                }
+            })
+            const currForm = document.getElementById("deleteForm")
+            currForm.setAttribute("action", "/admin/" + user.id + "/delete");
+        }
     </script>
 </head>
 

@@ -41,11 +41,8 @@ public class UserController {
 
 	@GetMapping("/admin")
 	public String getMethodName(Model model, Authentication authentication, @ModelAttribute("user") User user) {
-		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
-		User currentUser = userDetailsImpl.getUser();
 		List<User> users = userService.listUsers();
 		model.addAttribute("users", users);
-		model.addAttribute("currentUser", currentUser.getId());
 		return "/index";
 	}
 
@@ -58,9 +55,8 @@ public class UserController {
 		return "redirect:/admin";
 	}
 
-	@GetMapping(value = "/admin/{id}/delete")
-	public String deleteUser(@PathVariable("id") long id) {
-		User user = userService.get(id);
+	@PostMapping(value = "/admin/{id}/delete")
+	public String deleteUser(@PathVariable("id") long id, @ModelAttribute("user") User user) {
 		userService.delete(user);
 		return "redirect:/admin";
 	}

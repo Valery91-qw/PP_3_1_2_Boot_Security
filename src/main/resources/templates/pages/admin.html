@@ -45,13 +45,15 @@
                   Edit
                 </button>
               </td>
-              <td><button type="button" th:onclick="getCurrentUser([[${user.id}]])">Delete</button></td>
+              <td><button type="button" data-bs-toggle="modal" data-bs-target="#deleteModalCenter"
+                  th:onclick="deleteCurrentUser([[${user}]])">Delete</button></td>
             </tr>
           </tbody>
         </table>
       </div>
       <th:block th:replace="~{/fragments/form.html :: form}"></th:block>
       <th:block th:replace="~{/fragments/EditModal.html :: modal}"></th:block>
+      <th:block th:replace="~{/fragments/DeleteModal.html :: modal}"></th:block>
     </div>
   </div>
 </body>
