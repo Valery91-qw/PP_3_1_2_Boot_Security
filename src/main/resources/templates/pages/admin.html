@@ -40,19 +40,23 @@
                   th:text="${role.name.replaceFirst('ROLE_', '')}"></span>
               </td>
               <td>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#editModalCenter"
+                  th:onclick="getCurrentUser([[${user}]])">
                   Edit
                 </button>
               </td>
-              <td><button type="button">Delete</button></td>
+              <td><button type="button" th:onclick="getCurrentUser([[${user.id}]])">Delete</button></td>
             </tr>
           </tbody>
         </table>
       </div>
       <th:block th:replace="~{/fragments/form.html :: form}"></th:block>
-      <th:block th:replace="~{/fragments/modal.html :: modal}"></th:block>
+      <th:block th:replace="~{/fragments/EditModal.html :: modal}"></th:block>
     </div>
   </div>
 </body>
 
 </html>
+<!-- th:attr="data-target=${user}" -->
+<!-- th:onclick="getCurrentId([[${user.id}]])" -->
+<!-- data-bs-target="#editModalCenter" -->

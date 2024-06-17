@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.security.UserDetailsImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/")
@@ -48,23 +49,19 @@ public class UserController {
 		return "/index";
 	}
 
-	@GetMapping(value = "/admin/users/{id}/update")
-	public String updateUser(@PathVariable("id") long id, Model model) {
-		User user = userService.get(id);
-		model.addAttribute("user", user);
-		return "/update";
-	}
-
-	@PostMapping(value = "/admin/users/{id}/update")
-	public String updateUser(@PathVariable("id") long id, @ModelAttribute("user") User user) {
+	@PostMapping(value = "/admin/{id}/edit")
+	public String updateUser(@PathVariable("id") long id, @ModelAttribute("user") User user,
+			@RequestBody MultiValueMap<String, String> formData) {
+		List<String> role = formData.get("role");
+		user.setRoles(role);
 		userService.update(user);
-		return "redirect:/admin/users";
+		return "redirect:/admin";
 	}
 
-	@GetMapping(value = "/admin/users/{id}/delete")
+	@GetMapping(value = "/admin/{id}/delete")
 	public String deleteUser(@PathVariable("id") long id) {
 		User user = userService.get(id);
 		userService.delete(user);
-		return "redirect:/admin/users";
+		return "redirect:/admin";
 	}
 }
