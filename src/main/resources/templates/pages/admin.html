@@ -17,7 +17,7 @@
     <div class="tab-content" id="myTabContent">
       <!-- Table -->
       <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
-        <table class="table table-bordered table-dark">
+        <table class="table table-bordered table-light">
           <thead>
             <tr>
               <th scope="col">ID</th>
@@ -30,7 +30,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr th:each="user : ${users}">
+            <tr th:each="user : ${users}" th:style="${user.id == currentId} ? 'background-color: aliceblue;' : ''">
               <th scope="row" th:text="${user.id}"></th>
               <td th:text="${user.name}"></td>
               <td th:text="${user.lastName}"></td>
@@ -40,25 +40,23 @@
                   th:text="${role.name.replaceFirst('ROLE_', '')}"></span>
               </td>
               <td>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#editModalCenter"
+                <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#editModalCenter"
                   th:onclick="getCurrentUser([[${user}]])">
                   Edit
                 </button>
               </td>
-              <td><button type="button" data-bs-toggle="modal" data-bs-target="#deleteModalCenter"
+              <td><button class="btn btn-danger" type="button" data-bs-toggle="modal"
+                  th:disabled="${user.id == currentId}" data-bs-target="#deleteModalCenter"
                   th:onclick="deleteCurrentUser([[${user}]])">Delete</button></td>
             </tr>
           </tbody>
         </table>
       </div>
       <th:block th:replace="~{/fragments/form.html :: form}"></th:block>
-      <th:block th:replace="~{/fragments/EditModal.html :: modal}"></th:block>
-      <th:block th:replace="~{/fragments/DeleteModal.html :: modal}"></th:block>
+      <th:block th:replace="~{/fragments/editModal.html :: modal}"></th:block>
+      <th:block th:replace="~{/fragments/deleteModal.html :: modal}"></th:block>
     </div>
   </div>
 </body>
 
 </html>
-<!-- th:attr="data-target=${user}" -->
-<!-- th:onclick="getCurrentId([[${user.id}]])" -->
-<!-- data-bs-target="#editModalCenter" -->

@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-  <div style="margin-left: 5%;" th:fragment="user">
+  <div th:fragment="user" class="d-flex flex-column w-100">
     <h1>User infarmation-page</h1>
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <a class="nav-link" aria-current="page" th:href="@{/user}">About user</a>
+        <a class="nav-link" aria-current="page">About user</a>
       </li>
     </ul>
     <table class="table table-bordered table-dark">
@@ -24,7 +24,10 @@
           <td th:text="${user.name}"></td>
           <td th:text="${user.lastName}"></td>
           <td th:text="${user.age}"></td>
-          <td th:text="${user.roles}"></td>
+          <td>
+            <span style="margin-left: 5px;" th:each="role: ${user.roles}"
+              th:text="${role.name.replaceFirst('ROLE_', '')}"></span>
+          </td>
         </tr>
       </tbody>
     </table>

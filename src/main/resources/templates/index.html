@@ -52,14 +52,6 @@
     <header th:replace="~{/fragments/header.html :: header}"></header>
     <main class="d-flex">
         <div th:replace="~{/fragments/sidebar.html :: sidebar}"></div>
-
-        <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-            <div class="w-100 mx-3" th:insert="~{/pages/admin.html :: admin}" sec:authorize="hasRole('ROLE_ADMIN')">
-            </div>
-        </th:block>
-        <th:block th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-            <div class="w-100 mx-3" th:insert="~{/pages/user.html :: user}"></div>
-        </th:block>
     </main>
 </body>
 

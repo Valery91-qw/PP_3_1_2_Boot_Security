@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.security.UserDetailsImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/")
@@ -41,8 +40,12 @@ public class UserController {
 
 	@GetMapping("/admin")
 	public String getMethodName(Model model, Authentication authentication, @ModelAttribute("user") User user) {
+		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
+		User currentUser = userDetailsImpl.getUser();
 		List<User> users = userService.listUsers();
 		model.addAttribute("users", users);
+		model.addAttribute("user", currentUser);
+		model.addAttribute("currentId", currentUser.getId());
 		return "/index";
 	}
 
