@@ -1,16 +1,18 @@
 package ru.kata.spring.boot_security.demo.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,10 +78,6 @@ public class User {
       this.age = age;
    }
 
-   public String getPassword() {
-      return password;
-   }
-
    public void setPassword(String password) {
       this.password = password;
    }
@@ -94,5 +92,47 @@ public class User {
          modelRoles.add(new Roles(role));
       }
       this.roles = modelRoles;
+   }
+
+   @Override
+   public Collection<? extends GrantedAuthority> getAuthorities() {
+      List<GrantedAuthority> roles = new ArrayList<>();
+      List<Roles> userRoles = this.getRoles();
+
+      for (Roles userRole : userRoles) {
+         roles.add(new SimpleGrantedAuthority(userRole.getName()));
+      }
+
+      return roles;
+   }
+
+   @Override
+   public String getPassword() {
+      return this.password;
+   }
+
+   @Override
+   public String getUsername() {
+      return this.getName();
+   }
+
+   @Override
+   public boolean isAccountNonExpired() {
+      return true;
+   }
+
+   @Override
+   public boolean isAccountNonLocked() {
+      return true;
+   }
+
+   @Override
+   public boolean isCredentialsNonExpired() {
+      return true;
+   }
+
+   @Override
+   public boolean isEnabled() {
+      return true;
    }
 }

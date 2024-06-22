@@ -9,7 +9,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.security.UserDetailsImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -33,16 +32,14 @@ public class UserController {
 
 	@GetMapping("/user")
 	public String getMethodName(Authentication authentication, Model model) {
-		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
-		User user = userDetailsImpl.getUser();
+		User user = (User) authentication.getPrincipal();
 		model.addAttribute("user", user);
 		return "/index";
 	}
 
 	@GetMapping("/admin")
 	public String getMethodName(Model model, Authentication authentication, @ModelAttribute("user") User user) {
-		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
-		User currentUser = userDetailsImpl.getUser();
+		User currentUser = (User) authentication.getPrincipal();
 		List<User> users = userService.listUsers();
 		model.addAttribute("users", users);
 		model.addAttribute("user", currentUser);
