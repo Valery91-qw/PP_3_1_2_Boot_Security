@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 
+// TODO Handling exeptions after reduce the controller
 @Controller
 @RequestMapping("/")
 public class UserController {
@@ -20,6 +22,16 @@ public class UserController {
 
 	public UserController(UserService userService) {
 		this.userService = userService;
+	}
+
+	@GetMapping("/create")
+	public String createUser() {
+		User user = new User("admin", "admin", 0, "admin");
+		String[] roles = { "ROLE_ADMIN", "ROLE_USER" };
+		List<String> role = Arrays.asList(roles);
+		user.setRoles(role);
+		userService.create(user);
+		return "redirect:/admin";
 	}
 
 	@PostMapping()

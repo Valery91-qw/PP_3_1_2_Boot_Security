@@ -23,8 +23,12 @@ public class UserServiceImpl implements UserService {
 
    @Override
    @Transactional
-   public void create(User user) {
-      userDaoImpl.add(this.encodePassword(user));
+   public void create(User user) throws RuntimeException {
+      if (this.validateUserName(user)) {
+         this.userDaoImpl.add(this.encodePassword(user));
+      } else {
+         throw new RuntimeException("The field should be unique");
+      }
    }
 
    @Override
@@ -34,8 +38,12 @@ public class UserServiceImpl implements UserService {
 
    @Override
    @Transactional
-   public void update(User user) {
-      this.userDaoImpl.update(this.encodePassword(user));
+   public void update(User user) throws RuntimeException {
+      if (this.validateUserName(user)) {
+         this.userDaoImpl.update(this.encodePassword(user));
+      } else {
+         throw new RuntimeException("The field should be unique");
+      }
    }
 
    @Override
@@ -50,6 +58,7 @@ public class UserServiceImpl implements UserService {
    }
 
    @Override
+   @Transactional
    public void setUserRoles(Long userId, List<String> roles) {
       this.userDaoImpl.setUserRoles(userId, roles);
    }
@@ -59,4 +68,8 @@ public class UserServiceImpl implements UserService {
       user.setPassword(passwordEncoder.encode(pass));
       return user;
    };
+
+   private boolean validateUserName(User user) {
+      return userDaoImpl.loadUserByUsername(user.getUsername()).isEmpty();
+   }
 }
