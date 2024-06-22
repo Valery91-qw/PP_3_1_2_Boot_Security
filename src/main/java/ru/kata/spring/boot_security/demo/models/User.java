@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "users")
@@ -27,16 +29,14 @@ public class User {
    @Column(name = "password")
    private String password;
 
-   @ManyToMany (cascade = { CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
-   @JoinTable(
-      name = "user_roles", 
-      joinColumns = @JoinColumn(name = "user_id"), 
-      inverseJoinColumns = @JoinColumn(name = "roles_id")
-    )
+   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+   @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "roles_id"))
+
    private List<Roles> roles = new ArrayList<>();
 
-   public User() {}
-   
+   public User() {
+   }
+
    public User(String name, String lastName, int age, String password) {
       this.name = name;
       this.lastName = lastName;
@@ -67,7 +67,7 @@ public class User {
    public void setLastName(String lastName) {
       this.lastName = lastName;
    }
-   
+
    public int getAge() {
       return age;
    }
@@ -90,7 +90,7 @@ public class User {
 
    public void setRoles(List<String> roles) {
       List<Roles> modelRoles = new ArrayList<>();
-      for(String role: roles) {
+      for (String role : roles) {
          modelRoles.add(new Roles(role));
       }
       this.roles = modelRoles;

@@ -1,10 +1,8 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -20,19 +18,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserController {
 
 	private final UserService userService;
-	private final PasswordEncoder passwordEncoder;
 
-	public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+	public UserController(UserService userService) {
 		this.userService = userService;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	@PostMapping()
 	public String addUser(@ModelAttribute("user") User user, @RequestBody MultiValueMap<String, String> formData) {
 		List<String> role = formData.get("role");
 		user.setRoles(role);
-		String pass = user.getPassword();
-		user.setPassword(passwordEncoder.encode(pass));
 		userService.create(user);
 		return "redirect:/admin";
 	}
