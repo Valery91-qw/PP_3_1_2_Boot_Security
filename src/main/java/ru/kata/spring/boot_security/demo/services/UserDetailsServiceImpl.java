@@ -7,21 +7,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import ru.kata.spring.boot_security.demo.dao.UserDaoImpl;
+import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserDaoImpl userDaoImpl;
+    private final UserDao userDao;
 
-    public UserDetailsServiceImpl(UserDaoImpl userDaoImpl) {
-        this.userDaoImpl = userDaoImpl;
+    public UserDetailsServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = this.userDaoImpl.loadUserByUsername(username);
+        Optional<User> userOptional = this.userDao.loadUserByUsername(username);
 
         if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User not found with such name: " + username);

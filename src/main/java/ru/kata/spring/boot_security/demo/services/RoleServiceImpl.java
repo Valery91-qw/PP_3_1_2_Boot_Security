@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.models.Role;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 @Service
@@ -27,9 +29,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role get() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+    public List<Role> getAllRole() {
+        return this.roleDao.findAll();
     }
 
 }

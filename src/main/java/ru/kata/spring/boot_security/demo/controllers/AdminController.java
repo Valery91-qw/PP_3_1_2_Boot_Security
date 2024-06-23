@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 @Controller
@@ -16,18 +18,24 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 public class AdminController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping()
-    public String getAdminPage(Model model, Authentication authentication, @ModelAttribute("user") User user) {
+    public String getAdminPage(Model model, Authentication authentication, @ModelAttribute("user") User user,
+            @ModelAttribute("role") Role role) {
         User currentUser = (User) authentication.getPrincipal();
         List<User> users = userService.listUsers();
+        List<Role> roles = roleService.getAllRole();
+
         model.addAttribute("users", users);
         model.addAttribute("user", currentUser);
         model.addAttribute("currentId", currentUser.getId());
+        model.addAttribute("roles", roles);
         return "/index";
     }
 
