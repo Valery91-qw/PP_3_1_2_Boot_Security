@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -40,10 +41,14 @@ public class AdminController {
     }
 
     @PostMapping()
-    public String addUser(@ModelAttribute("user") User user, @RequestBody MultiValueMap<String, String> formData) {
-        List<String> role = formData.get("role");
-        user.setRoles(role);
-        userService.create(user);
+    public String addUser(@ModelAttribute("user") User user, @ModelAttribute("role") Role role) {
+        String[] strings = role.getName().split(",");
+        Role currentRole = this.roleService.findByName(strings[1]);
+        List<Role> roles = new ArrayList();
+        roles.add(currentRole);
+        user.setName(strings[0]);
+        user.setRoles(roles);
+        this.userService.create(user);
         return "redirect:/admin";
     }
 
@@ -51,7 +56,10 @@ public class AdminController {
     public String updateUser(@PathVariable("id") long id, @ModelAttribute("user") User user,
             @RequestBody MultiValueMap<String, String> formData) {
         List<String> role = formData.get("role");
-        user.setRoles(role);
+        Role currentRole = this.roleService.findByName(role.get(0));
+        List<Role> roles = new ArrayList();
+        roles.add(currentRole);
+        user.setRoles(roles);
         userService.update(user);
         return "redirect:/admin";
     }

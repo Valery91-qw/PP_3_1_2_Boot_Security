@@ -24,21 +24,10 @@
                 <legend class="col-form-label col-sm-2 pt-0">Roles</legend>
                 <div class="col-sm-10">
                     <div class="form-check" th:each="role : ${roles}">
-                        <!-- <input class="form-check-input" type="radio" name="role" id="ROLE_USER" value="ROLE_USER"
-                            checked>
-                        <label class="form-check-label" for="ROLE_USER">
-                            User
-                        </label> -->
-                        <input class="form-check-input" type="radio" th:field="*{role.name}" th:value="${role.name}"
-                            checked>
-                        <label class="form-check-label" th:for="${role.name}" th:text="${role.name}"></label>
+                        <input class="form-check-input" type="radio" th:field="*{role.name}"
+                            th:value="${role.getName()}" checked>
+                        <label class="form-check-label" th:for="${role.name}" th:text="${role.getName()}"></label>
                     </div>
-                    <!-- <div class="form-check">
-                        <input class="form-check-input" type="radio" name="role" id="ROLE_ADMIN" value="ROLE_ADMIN">
-                        <label class="form-check-label" for="ROLE_ADMIN">
-                            Admin
-                        </label>
-                    </div> -->
                 </div>
             </fieldset>
             <button type="submit">Submit</button>

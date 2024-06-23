@@ -21,11 +21,11 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     @Override
     public void create(String name) {
-        if (this.roleDao.findByName(name).isEmpty()) {
-            this.roleDao.save(new Role(name));
-        } else {
+        // if (this.roleDao.findByName(name)) {
+        this.roleDao.save(new Role(name));
+        // } else {
 
-        }
+        // }
     }
 
     @Override
@@ -33,4 +33,9 @@ public class RoleServiceImpl implements RoleService {
         return this.roleDao.findAll();
     }
 
+    @Override
+    public Role findByName(String name) {
+        System.out.println(name);
+        return this.roleDao.findByName(name);
+    }
 }

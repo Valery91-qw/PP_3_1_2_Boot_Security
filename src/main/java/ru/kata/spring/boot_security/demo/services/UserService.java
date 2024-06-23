@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.services;
 
 import java.util.List;
 
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 public interface UserService {
@@ -15,5 +16,5 @@ public interface UserService {
 
     List<User> listUsers();
 
-    void setUserRoles(Long userId, List<String> roles);
+    void setUserRoles(Long userId, List<Role> roles);
 }

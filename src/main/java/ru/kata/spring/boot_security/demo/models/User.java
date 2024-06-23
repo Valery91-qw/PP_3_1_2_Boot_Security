@@ -86,12 +86,8 @@ public class User implements UserDetails {
       return roles;
    }
 
-   public void setRoles(List<String> roles) {
-      List<Role> modelRoles = new ArrayList<>();
-      for (String role : roles) {
-         modelRoles.add(new Role(role));
-      }
-      this.roles = modelRoles;
+   public void setRoles(List<Role> roles) {
+      this.roles = roles;
    }
 
    @Override

@@ -3,7 +3,9 @@ package ru.kata.spring.boot_security.demo.services;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.List;
@@ -14,11 +16,13 @@ import javax.transaction.Transactional;
 public class UserServiceImpl implements UserService {
 
    private final UserDao userDao;
+   private final RoleDao roleDao;
    private final PasswordEncoder passwordEncoder;
 
-   public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+   public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder, RoleDao roleDao) {
       this.userDao = userDao;
       this.passwordEncoder = passwordEncoder;
+      this.roleDao = roleDao;
    }
 
    @Override
@@ -33,17 +37,13 @@ public class UserServiceImpl implements UserService {
 
    @Override
    public User get(long id) {
-      return userDao.get(id);
+      return this.userDao.get(id);
    }
 
    @Override
    @Transactional
    public void update(User user) throws RuntimeException {
-      if (this.validateUserName(user)) {
-         this.userDao.update(this.encodePassword(user));
-      } else {
-         throw new RuntimeException("The field should be unique");
-      }
+      this.userDao.update(this.encodePassword(user));
    }
 
    @Override
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
    @Override
    @Transactional
-   public void setUserRoles(Long userId, List<String> roles) {
+   public void setUserRoles(Long userId, List<Role> roles) {
       this.userDao.setUserRoles(userId, roles);
    }
 
@@ -70,6 +70,6 @@ public class UserServiceImpl implements UserService {
    };
 
    private boolean validateUserName(User user) {
-      return userDao.loadUserByUsername(user.getUsername()).isEmpty();
+      return this.userDao.loadUserByUsername(user.getUsername()).isEmpty();
    }
 }
