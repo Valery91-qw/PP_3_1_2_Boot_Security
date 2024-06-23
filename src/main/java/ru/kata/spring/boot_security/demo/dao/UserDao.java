@@ -19,5 +19,5 @@ public interface UserDao {
 
    Optional<User> loadUserByUsername(String username);
 
-   void setUserRoles(Long userId, List<Role> roles);
+   // void setUserRoles(Long userId, List<Role> roles);
 }

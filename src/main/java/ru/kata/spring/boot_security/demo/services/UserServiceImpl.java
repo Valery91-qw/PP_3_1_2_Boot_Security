@@ -60,7 +60,9 @@ public class UserServiceImpl implements UserService {
    @Override
    @Transactional
    public void setUserRoles(Long userId, List<Role> roles) {
-      this.userDao.setUserRoles(userId, roles);
+      User user = this.get(userId);
+      user.setRoles(roles);
+      this.update(user);
    }
 
    private User encodePassword(User user) {

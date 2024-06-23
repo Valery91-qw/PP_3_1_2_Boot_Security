@@ -59,10 +59,10 @@ public class UserDaoImpl implements UserDao {
       return Optional.ofNullable(user);
    }
 
-   @Override
-   public void setUserRoles(Long userId, List<Role> roles) {
-      User user = this.get(userId);
-      user.setRoles(roles);
-      this.update(user);
-   }
+   // @Override
+   // public void setUserRoles(Long userId, List<Role> roles) {
+   // User user = this.get(userId);
+   // user.setRoles(roles);
+   // this.update(user);
+   // }
 }
