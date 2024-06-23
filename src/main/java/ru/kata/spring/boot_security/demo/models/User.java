@@ -34,7 +34,7 @@ public class User implements UserDetails {
    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "roles_id"))
 
-   private List<Roles> roles = new ArrayList<>();
+   private List<Role> roles = new ArrayList<>();
 
    public User() {
    }
@@ -82,14 +82,14 @@ public class User implements UserDetails {
       this.password = password;
    }
 
-   public List<Roles> getRoles() {
+   public List<Role> getRoles() {
       return roles;
    }
 
    public void setRoles(List<String> roles) {
-      List<Roles> modelRoles = new ArrayList<>();
+      List<Role> modelRoles = new ArrayList<>();
       for (String role : roles) {
-         modelRoles.add(new Roles(role));
+         modelRoles.add(new Role(role));
       }
       this.roles = modelRoles;
    }
@@ -97,9 +97,9 @@ public class User implements UserDetails {
    @Override
    public Collection<? extends GrantedAuthority> getAuthorities() {
       List<GrantedAuthority> roles = new ArrayList<>();
-      List<Roles> userRoles = this.getRoles();
+      List<Role> userRoles = this.getRoles();
 
-      for (Roles userRole : userRoles) {
+      for (Role userRole : userRoles) {
          roles.add(new SimpleGrantedAuthority(userRole.getName()));
       }
 
