@@ -3,7 +3,7 @@ package ru.kata.spring.boot_security.demo.services;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import ru.kata.spring.boot_security.demo.dao.UserDaoImpl;
+import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.List;
@@ -13,11 +13,11 @@ import javax.transaction.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
 
-   private final UserDaoImpl userDaoImpl;
+   private final UserDao userDao;
    private final PasswordEncoder passwordEncoder;
 
-   public UserServiceImpl(UserDaoImpl userDaoImpl, PasswordEncoder passwordEncoder) {
-      this.userDaoImpl = userDaoImpl;
+   public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+      this.userDao = userDao;
       this.passwordEncoder = passwordEncoder;
    }
 
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
    @Transactional
    public void create(User user) throws RuntimeException {
       if (this.validateUserName(user)) {
-         this.userDaoImpl.add(this.encodePassword(user));
+         this.userDao.add(this.encodePassword(user));
       } else {
          throw new RuntimeException("The field should be unique");
       }
@@ -33,14 +33,14 @@ public class UserServiceImpl implements UserService {
 
    @Override
    public User get(long id) {
-      return userDaoImpl.get(id);
+      return userDao.get(id);
    }
 
    @Override
    @Transactional
    public void update(User user) throws RuntimeException {
       if (this.validateUserName(user)) {
-         this.userDaoImpl.update(this.encodePassword(user));
+         this.userDao.update(this.encodePassword(user));
       } else {
          throw new RuntimeException("The field should be unique");
       }
@@ -49,18 +49,18 @@ public class UserServiceImpl implements UserService {
    @Override
    @Transactional
    public void delete(User user) {
-      this.userDaoImpl.delete(user);
+      this.userDao.delete(user);
    }
 
    @Override
    public List<User> listUsers() {
-      return this.userDaoImpl.listUsers();
+      return this.userDao.listUsers();
    }
 
    @Override
    @Transactional
    public void setUserRoles(Long userId, List<String> roles) {
-      this.userDaoImpl.setUserRoles(userId, roles);
+      this.userDao.setUserRoles(userId, roles);
    }
 
    private User encodePassword(User user) {
@@ -70,6 +70,6 @@ public class UserServiceImpl implements UserService {
    };
 
    private boolean validateUserName(User user) {
-      return userDaoImpl.loadUserByUsername(user.getUsername()).isEmpty();
+      return userDao.loadUserByUsername(user.getUsername()).isEmpty();
    }
 }
