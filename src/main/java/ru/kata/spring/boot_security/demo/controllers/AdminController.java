@@ -54,10 +54,8 @@ public class AdminController {
     @PostMapping(value = "/{id}/edit")
     public String updateUser(@PathVariable("id") long id, @ModelAttribute("user") User user,
             @RequestBody MultiValueMap<String, String> formData) {
-        List<String> role = formData.get("role");
-        Role currentRole = this.roleService.findByName(role.get(0));
-        List<Role> roles = new ArrayList();
-        roles.add(currentRole);
+        String names = formData.get("role").toString();
+        List<Role> roles = exstractRoles(names.substring(1, names.length() - 1));
         user.setRoles(roles);
         userService.update(user);
         return "redirect:/admin";
@@ -74,7 +72,7 @@ public class AdminController {
         List<Role> roles = new ArrayList<>();
         for (String name : allNames) {
             if (name.contains("ROLE_")) {
-                roles.add(this.roleService.findByName(name));
+                roles.add(this.roleService.findByName(name.trim()));
             }
         }
         return roles;
