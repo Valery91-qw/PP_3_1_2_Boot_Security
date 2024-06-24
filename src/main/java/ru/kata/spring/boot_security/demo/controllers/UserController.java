@@ -9,10 +9,10 @@ import ru.kata.spring.boot_security.demo.models.User;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/")
 public class UserController {
 
-	@GetMapping()
+	@GetMapping("/user")
 	public String getMethodName(Authentication authentication, Model model) {
 		User user = (User) authentication.getPrincipal();
 		model.addAttribute("user", user);

@@ -16,22 +16,20 @@ import javax.transaction.Transactional;
 public class UserServiceImpl implements UserService {
 
    private final UserDao userDao;
-   private final RoleDao roleDao;
    private final PasswordEncoder passwordEncoder;
 
    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder, RoleDao roleDao) {
       this.userDao = userDao;
       this.passwordEncoder = passwordEncoder;
-      this.roleDao = roleDao;
    }
 
    @Override
    @Transactional
-   public void create(User user) throws RuntimeException {
+   public void create(User user) {
       if (this.validateUserName(user)) {
          this.userDao.add(this.encodePassword(user));
       } else {
-         throw new RuntimeException("The field should be unique");
+
       }
    }
 

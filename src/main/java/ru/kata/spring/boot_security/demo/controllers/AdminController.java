@@ -43,7 +43,6 @@ public class AdminController {
     @PostMapping()
     public String addUser(@ModelAttribute("user") User user, @ModelAttribute("role") Role role) {
         String username = role.getName().split(",")[0];
-        // Role currentRole = this.roleService.findByName(strings[1]);
         List<Role> roles = exstractRoles(role.getName());
         user.setName(username);
         user.setRoles(roles);
