@@ -2,7 +2,6 @@ package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
 
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
@@ -58,11 +57,4 @@ public class UserDaoImpl implements UserDao {
       }
       return Optional.ofNullable(user);
    }
-
-   // @Override
-   // public void setUserRoles(Long userId, List<Role> roles) {
-   // User user = this.get(userId);
-   // user.setRoles(roles);
-   // this.update(user);
-   // }
 }

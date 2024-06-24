@@ -3,7 +3,6 @@ package ru.kata.spring.boot_security.demo.dao;
 import java.util.List;
 import java.util.Optional;
 
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 public interface UserDao {
@@ -18,6 +17,4 @@ public interface UserDao {
    List<User> listUsers();
 
    Optional<User> loadUserByUsername(String username);
-
-   // void setUserRoles(Long userId, List<Role> roles);
 }

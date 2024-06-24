@@ -42,11 +42,10 @@ public class AdminController {
 
     @PostMapping()
     public String addUser(@ModelAttribute("user") User user, @ModelAttribute("role") Role role) {
-        String[] strings = role.getName().split(",");
-        Role currentRole = this.roleService.findByName(strings[1]);
-        List<Role> roles = new ArrayList();
-        roles.add(currentRole);
-        user.setName(strings[0]);
+        String username = role.getName().split(",")[0];
+        // Role currentRole = this.roleService.findByName(strings[1]);
+        List<Role> roles = exstractRoles(role.getName());
+        user.setName(username);
         user.setRoles(roles);
         this.userService.create(user);
         return "redirect:/admin";
@@ -68,5 +67,16 @@ public class AdminController {
     public String deleteUser(@PathVariable("id") long id, @ModelAttribute("user") User user) {
         userService.delete(user);
         return "redirect:/admin";
+    }
+
+    private List<Role> exstractRoles(String names) {
+        String[] allNames = names.split(",");
+        List<Role> roles = new ArrayList<>();
+        for (String name : allNames) {
+            if (name.contains("ROLE_")) {
+                roles.add(this.roleService.findByName(name));
+            }
+        }
+        return roles;
     }
 }
