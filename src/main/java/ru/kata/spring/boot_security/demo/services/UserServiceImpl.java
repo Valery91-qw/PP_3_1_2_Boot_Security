@@ -1,8 +1,11 @@
 package ru.kata.spring.boot_security.demo.services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import ru.kata.spring.boot_security.demo.dao.UserDaoImpl;
+import ru.kata.spring.boot_security.demo.dao.RoleDao;
+import ru.kata.spring.boot_security.demo.dao.UserDao;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.List;
@@ -12,42 +15,59 @@ import javax.transaction.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
 
-   private final UserDaoImpl userDaoImpl;
+   private final UserDao userDao;
+   private final PasswordEncoder passwordEncoder;
 
-   public UserServiceImpl(UserDaoImpl userDaoImpl) {
-      this.userDaoImpl = userDaoImpl;
+   public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder, RoleDao roleDao) {
+      this.userDao = userDao;
+      this.passwordEncoder = passwordEncoder;
    }
 
    @Override
    @Transactional
    public void create(User user) {
-      userDaoImpl.add(user);
+      if (this.validateUserName(user)) {
+         this.userDao.add(this.encodePassword(user));
+      }
    }
 
    @Override
    public User get(long id) {
-      return userDaoImpl.get(id);
+      return this.userDao.get(id);
    }
 
    @Override
    @Transactional
-   public void update(User user) {
-      this.userDaoImpl.update(user);
+   public void update(User user) throws RuntimeException {
+      this.userDao.update(this.encodePassword(user));
    }
 
    @Override
    @Transactional
    public void delete(User user) {
-      this.userDaoImpl.delete(user);
+      this.userDao.delete(user);
    }
 
    @Override
    public List<User> listUsers() {
-      return this.userDaoImpl.listUsers();
+      return this.userDao.listUsers();
    }
 
    @Override
-   public void setUserRoles(Long userId, List<String> roles) {
-      this.userDaoImpl.setUserRoles(userId, roles);
+   @Transactional
+   public void setUserRoles(Long userId, List<Role> roles) {
+      User user = this.get(userId);
+      user.setRoles(roles);
+      this.update(user);
+   }
+
+   private User encodePassword(User user) {
+      String pass = user.getPassword();
+      user.setPassword(passwordEncoder.encode(pass));
+      return user;
+   };
+
+   private boolean validateUserName(User user) {
+      return this.userDao.loadUserByUsername(user.getUsername()).isEmpty();
    }
 }
