@@ -23,8 +23,6 @@ public class RoleServiceImpl implements RoleService {
     public void create(String name) {
         if (this.roleDao.findByName(name) != null) {
             this.roleDao.save(new Role(name));
-        } else {
-
         }
     }
 

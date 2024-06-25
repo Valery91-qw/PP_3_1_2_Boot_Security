@@ -42,7 +42,7 @@ public class AdminController {
 
     @PostMapping()
     public String addUser(@ModelAttribute("user") User user, @ModelAttribute("role") Role role) {
-        String username = role.getName().split(",")[0];
+        String username = extractUserName(user.getName());
         List<Role> roles = exstractRoles(role.getName());
         user.setName(username);
         user.setRoles(roles);
@@ -75,5 +75,11 @@ public class AdminController {
             }
         }
         return roles;
+    }
+
+    // Из-за того что у формы нет поля th:object в поле name поподают все строки для
+    // th:fiel={*name}
+    private String extractUserName(String names) {
+        return names.split(",")[0];
     }
 }

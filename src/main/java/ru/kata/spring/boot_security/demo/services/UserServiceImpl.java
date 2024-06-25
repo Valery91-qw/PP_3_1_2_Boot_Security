@@ -28,8 +28,6 @@ public class UserServiceImpl implements UserService {
    public void create(User user) {
       if (this.validateUserName(user)) {
          this.userDao.add(this.encodePassword(user));
-      } else {
-
       }
    }
 
