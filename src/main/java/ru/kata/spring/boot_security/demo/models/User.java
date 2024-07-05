@@ -1,21 +1,25 @@
 package ru.kata.spring.boot_security.demo.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.*;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long id;
 
-   @Column(name = "name")
+   @Column(name = "name", unique = true)
    private String name;
 
    @Column(name = "last_name")
@@ -27,16 +31,14 @@ public class User {
    @Column(name = "password")
    private String password;
 
-   @ManyToMany (cascade = { CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
-   @JoinTable(
-      name = "user_roles", 
-      joinColumns = @JoinColumn(name = "user_id"), 
-      inverseJoinColumns = @JoinColumn(name = "roles_id")
-    )
-   private List<Roles> roles = new ArrayList<>();
+   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+   @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "roles_id"))
 
-   public User() {}
-   
+   private List<Role> roles = new ArrayList<>();
+
+   public User() {
+   }
+
    public User(String name, String lastName, int age, String password) {
       this.name = name;
       this.lastName = lastName;
@@ -67,7 +69,7 @@ public class User {
    public void setLastName(String lastName) {
       this.lastName = lastName;
    }
-   
+
    public int getAge() {
       return age;
    }
@@ -76,23 +78,57 @@ public class User {
       this.age = age;
    }
 
-   public String getPassword() {
-      return password;
-   }
-
    public void setPassword(String password) {
       this.password = password;
    }
 
-   public List<Roles> getRoles() {
+   public List<Role> getRoles() {
       return roles;
    }
 
-   public void setRoles(List<String> roles) {
-      List<Roles> modelRoles = new ArrayList<>();
-      for(String role: roles) {
-         modelRoles.add(new Roles(role));
+   public void setRoles(List<Role> roles) {
+      this.roles = roles;
+   }
+
+   @Override
+   public Collection<? extends GrantedAuthority> getAuthorities() {
+      List<GrantedAuthority> roles = new ArrayList<>();
+      List<Role> userRoles = this.getRoles();
+
+      for (Role userRole : userRoles) {
+         roles.add(new SimpleGrantedAuthority(userRole.getName()));
       }
-      this.roles = modelRoles;
+
+      return roles;
+   }
+
+   @Override
+   public String getPassword() {
+      return this.password;
+   }
+
+   @Override
+   public String getUsername() {
+      return this.getName();
+   }
+
+   @Override
+   public boolean isAccountNonExpired() {
+      return true;
+   }
+
+   @Override
+   public boolean isAccountNonLocked() {
+      return true;
+   }
+
+   @Override
+   public boolean isCredentialsNonExpired() {
+      return true;
+   }
+
+   @Override
+   public boolean isEnabled() {
+      return true;
    }
 }

@@ -1,12 +1,12 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
+
 import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +16,6 @@ public class UserDaoImpl implements UserDao {
    @PersistenceContext
    private EntityManager entityManager;
 
-   @Transactional
    @Override
    public void add(User user) {
       entityManager.persist(user);
@@ -28,13 +27,11 @@ public class UserDaoImpl implements UserDao {
       return user;
    }
 
-   @Transactional
    @Override
    public void update(User user) {
       entityManager.merge(user);
    }
 
-   @Transactional
    @Override
    public void delete(User user) {
       user = entityManager.merge(user);
@@ -59,13 +56,5 @@ public class UserDaoImpl implements UserDao {
          user = null;
       }
       return Optional.ofNullable(user);
-   }
-
-   @Transactional
-   @Override
-   public void setUserRoles(Long userId, List<String> roles) {
-      User user = get(userId);
-      user.setRoles(roles);
-      update(user);
    }
 }

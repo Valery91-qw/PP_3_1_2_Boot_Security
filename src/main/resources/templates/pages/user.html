@@ -20,13 +20,14 @@
       </thead>
       <tbody>
         <tr>
-          <th scope="row" th:text="${user.id}"></th>
-          <td th:text="${user.name}"></td>
-          <td th:text="${user.lastName}"></td>
-          <td th:text="${user.age}"></td>
+          <td class="id"></td>
+          <td class="name"></td>
+          <td class="lastName"></td>
+          <td class="age"></td>
           <td>
-            <span style="margin-left: 5px;" th:each="role: ${user.roles}"
-              th:text="${role.name.replaceFirst('ROLE_', '')}"></span>
+            <span style="margin-left: 5px;" th:each="authority : ${#authentication.getAuthorities()}"
+              th:if="${authority.getAuthority().startsWith('ROLE_')}"
+              th:text="${authority.getAuthority().replaceFirst('ROLE_', '')}"></span>
           </td>
         </tr>
       </tbody>

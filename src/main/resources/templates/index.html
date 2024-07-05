@@ -12,6 +12,19 @@
 
         </script>
     <script th:inline="javascript">
+
+        function fetchCurrentUserData() {
+            fetch("/user").then(res => res.json()).then(data => {
+                const allTd = document.querySelectorAll("td");
+                for (let i = 0; i < allTd.length; i++) {
+                    if (allTd[i].classList != 0) {
+                        const className = allTd[i].classList[0];
+                        allTd[i].innerText = data[className];
+                    }
+                }
+            })
+        }
+
         function getCurrentUser(user) {
             const myModal = document.getElementById("editModalCenter");
             myModal.addEventListener("shown.bs.modal", function (event) {
