@@ -13,26 +13,26 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="deleteForm" th:method="post" th:action="@{/admin/{id}/delete}" th:object="${user}">
+                    <form id="deleteForm" th:method="post" th:action="@{/admin/{id}/delete}">
                         <div class="mb-3">
                             <label for="id" class="form-label">Id</label>
                             <input type="text" class="form-control" id="id" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" th:field="*{name}" disabled>
+                            <input type="text" class="form-control" id="name" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="lastName" class="form-label">lastName</label>
-                            <input type="text" class="form-control" id="lastName" th:field="*{lastName}" disabled>
+                            <input type="text" class="form-control" id="lastName" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="age" class="form-label">Age</label>
-                            <input type="text" class="form-control" id="age" th:field="*{age}" disabled>
+                            <input type="text" class="form-control" id="age" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" th:field="*{password}" disabled>
+                            <input type="password" class="form-control" id="password" disabled>
                         </div>
                         <fieldset class="row mb-3">
                             <legend class="col-form-label col-sm-2 pt-0">Roles</legend>

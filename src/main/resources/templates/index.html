@@ -12,6 +12,48 @@
 
         </script>
     <script th:inline="javascript">
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        // this for back
+        // const userEntity = {
+        //     id: null,
+        //     name: null,
+        //     lastName: null,
+        //     age: null,
+        //     password: null,
+        //     roles: [],
+        // }
+
+        function fetchAllUsers() {
+            fetch("/admin/users").then(res => res.json()).then(res => {
+                const tbody = document.getElementById("users-table-body")
+                tbody.innerHTML = "";
+                for (let i = 0; i < res.length; i++) {
+                    const content = `<tr>
+                    <th scope="row">${res[i].id}</th>
+                    <td>${res[i].name}</td>
+                    <td>${res[i].lastName}</td>
+                    <td>${res[i].age}</td>
+                    <td>
+                     ${res[i].roles.map(role => `<span style="margin-left: 5px;">${role.name.replace("ROLE_", "")}</span>`)}
+                    </td>
+                    <td>
+                     <button data-user=${JSON.stringify(res[i])} class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#editModalCenter"
+                        onclick=getCurrentUser()>
+                        Edit
+                     </button>
+                    </td>
+                    <td>
+                        <button data-user=${JSON.stringify(res[i])} class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModalCenter"
+                        onclick=deleteCurrentUser()>Delete</button>
+                    </td>
+                    </tr>`
+                    tbody.innerHTML += content
+                }
+            })
+        }
 
         function fetchCurrentUserData() {
             fetch("/user").then(res => res.json()).then(data => {
@@ -25,7 +67,8 @@
             })
         }
 
-        function getCurrentUser(user) {
+        function getCurrentUser() {
+            const user = JSON.parse(this.event.currentTarget.getAttribute("data-user"))
             const myModal = document.getElementById("editModalCenter");
             myModal.addEventListener("shown.bs.modal", function (event) {
                 const allInputs = myModal.querySelectorAll("input");
@@ -39,11 +82,36 @@
                 }
             })
             const currForm = document.getElementById("editForm")
-            currForm.setAttribute("action", "/admin/" + user.id + "/edit");
+            currForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const collection = currForm.querySelectorAll("input")
+                const data = {
+                    roles: []
+                };
+                for (let i = 0; i <= collection.length; i++) {
+                    const name = collection[i]?.name
+                    if (name) {
+                        if (name !== "role") {
+                            data[name] = collection[i].value;
+                        } else {
+                            if (collection[i].checked) {
+                                data["roles"] = [...data["roles"], collection[i].value]
+                            }
+                        }
+                    }
+                }
+                fetch(`http://localhost:8080/admin/users/` + user.id, {
+                    method: "PUT",
+                    headers,
+                    body: JSON.stringify(data),
+                }).then(res => {
+                    fetchAllUsers();
+                })
+            })
         }
 
-        function deleteCurrentUser(user) {
-            console.log(user);
+        function deleteCurrentUser() {
+            const user = JSON.parse(this.event.currentTarget.getAttribute("data-user"))
             const myModal = document.getElementById("deleteModalCenter");
             myModal.addEventListener("shown.bs.modal", function (event) {
                 const allInputs = myModal.querySelectorAll("input");
@@ -62,7 +130,7 @@
     </script>
 </head>
 
-<body class="bg-light">
+<body class="bg-light" th:onload="fetchAllUsers()">
     <header th:replace="~{/fragments/header.html :: header}"></header>
     <main class="d-flex">
         <div th:replace="~{/fragments/sidebar.html :: sidebar}"></div>

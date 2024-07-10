@@ -4,12 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
-// @Controller
-// @RequestMapping("/")
-// public class ViewController {
+@Controller
+@RequestMapping("/")
+public class ViewController {
 
-// @GetMapping("/user")
-// public String getView() {
-// return "index";
-// }
-// }
+    @GetMapping()
+    public String getView() {
+        return "index";
+    }
+}

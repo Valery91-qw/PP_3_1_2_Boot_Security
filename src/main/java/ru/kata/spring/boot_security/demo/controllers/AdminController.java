@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 @Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -26,18 +28,10 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping()
-    public String getAdminPage(Model model, Authentication authentication, @ModelAttribute("user") User user,
-            @ModelAttribute("role") Role role) {
-        User currentUser = (User) authentication.getPrincipal();
+    @GetMapping("/users")
+    public List<User> getAdminPage(Model model, Authentication authentication) {
         List<User> users = userService.listUsers();
-        List<Role> roles = roleService.getAllRole();
-
-        model.addAttribute("users", users);
-        model.addAttribute("user", currentUser);
-        model.addAttribute("currentId", currentUser.getId());
-        model.addAttribute("roles", roles);
-        return "/index";
+        return users;
     }
 
     @PostMapping()
@@ -47,23 +41,20 @@ public class AdminController {
         user.setName(username);
         user.setRoles(roles);
         this.userService.create(user);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
-    @PostMapping(value = "/{id}/edit")
-    public String updateUser(@PathVariable("id") long id, @ModelAttribute("user") User user,
-            @RequestBody MultiValueMap<String, String> formData) {
-        String names = formData.get("role").toString();
-        List<Role> roles = exstractRoles(names.substring(1, names.length() - 1));
-        user.setRoles(roles);
+    @PutMapping(value = "/users/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable("id") long id, @RequestBody User user) {
+        user.setId(id);
         userService.update(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok("fine");
     }
 
     @PostMapping(value = "/{id}/delete")
     public String deleteUser(@PathVariable("id") long id, @ModelAttribute("user") User user) {
         userService.delete(user);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
     private List<Role> exstractRoles(String names) {
