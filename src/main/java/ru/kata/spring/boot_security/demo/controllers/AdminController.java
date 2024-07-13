@@ -51,10 +51,10 @@ public class AdminController {
         return ResponseEntity.ok("fine");
     }
 
-    @PostMapping(value = "/{id}/delete")
-    public String deleteUser(@PathVariable("id") long id, @ModelAttribute("user") User user) {
-        userService.delete(user);
-        return "redirect:/";
+    @DeleteMapping(value = "/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") long id, @ModelAttribute("user") User user) {
+        userService.delete(userService.get(id));
+        return ResponseEntity.ok("fine");
     }
 
     private List<Role> exstractRoles(String names) {

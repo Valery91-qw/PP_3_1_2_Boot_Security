@@ -16,6 +16,7 @@
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
+        const baseUrl = `http://localhost:8080/admin/users/`;
         // this for back
         // const userEntity = {
         //     id: null,
@@ -27,7 +28,7 @@
         // }
 
         function fetchAllUsers() {
-            fetch("/admin/users").then(res => res.json()).then(res => {
+            fetch(baseUrl).then(res => res.json()).then(res => {
                 const tbody = document.getElementById("users-table-body")
                 tbody.innerHTML = "";
                 for (let i = 0; i < res.length; i++) {
@@ -70,17 +71,7 @@
         function getCurrentUser() {
             const user = JSON.parse(this.event.currentTarget.getAttribute("data-user"))
             const myModal = document.getElementById("editModalCenter");
-            myModal.addEventListener("shown.bs.modal", function (event) {
-                const allInputs = myModal.querySelectorAll("input");
-                for (let i = 1; i < allInputs.length; i++) {
-                    const id = allInputs[i].getAttribute("id");
-                    if (id.includes("ROLE")) {
-                        allInputs[i].value = allInputs[i].id;
-                    } else {
-                        allInputs[i].value = user[id];
-                    }
-                }
-            })
+            fillForm(myModal, user)
             const currForm = document.getElementById("editForm")
             currForm.addEventListener("submit", function (event) {
                 event.preventDefault();
@@ -100,7 +91,7 @@
                         }
                     }
                 }
-                fetch(`http://localhost:8080/admin/users/` + user.id, {
+                fetch(baseUrl + user.id, {
                     method: "PUT",
                     headers,
                     body: JSON.stringify(data),
@@ -113,19 +104,31 @@
         function deleteCurrentUser() {
             const user = JSON.parse(this.event.currentTarget.getAttribute("data-user"))
             const myModal = document.getElementById("deleteModalCenter");
-            myModal.addEventListener("shown.bs.modal", function (event) {
-                const allInputs = myModal.querySelectorAll("input");
-                for (let i = 1; i < allInputs.length; i++) {
+            fillForm(myModal, user)
+            const currForm = document.getElementById("deleteForm")
+            currForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                fetch(baseUrl + user.id, {
+                    method: "DELETE",
+                    headers,
+                }).then(res => {
+                    fetchAllUsers();
+                })
+            })
+        }
+
+        function fillForm(form, data) {
+            form.addEventListener("shown.bs.modal", function (event) {
+                const allInputs = form.querySelectorAll("input");
+                for (let i = 0; i < allInputs.length; i++) {
                     const id = allInputs[i].getAttribute("id");
                     if (id.includes("ROLE")) {
                         allInputs[i].value = allInputs[i].id;
                     } else {
-                        allInputs[i].value = user[id];
+                        allInputs[i].value = data[id];
                     }
                 }
             })
-            const currForm = document.getElementById("deleteForm")
-            currForm.setAttribute("action", "/admin/" + user.id + "/delete");
         }
     </script>
 </head>
