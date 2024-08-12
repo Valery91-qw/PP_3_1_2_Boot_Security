@@ -163,7 +163,6 @@
 
         function fillForm(form, data) {
             form.addEventListener("shown.bs.modal", function (event) {
-                console.log(data);
                 const allInputs = form.querySelectorAll("input");
                 for (let i = 0; i < allInputs.length; i++) {
                     const id = allInputs[i].getAttribute("id");
