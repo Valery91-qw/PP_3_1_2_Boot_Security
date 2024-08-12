@@ -27,6 +27,20 @@
         //     roles: [],
         // }
 
+        function replaceSpace(key, value) {
+            if (typeof value === "string") {
+                return value.includes(' ') ? value = value.replace(' ', '_') : value;
+            }
+            return value;
+        }
+
+        function replacer(key, value) {
+            if (typeof value === "string") {
+                return value.includes('_') ? value = value.replace('_', ' ') : value;
+            }
+            return value;
+        }
+
         function fetchAllUsers() {
             fetch(baseUrl).then(res => res.json()).then(res => {
                 const tbody = document.getElementById("users-table-body")
@@ -41,13 +55,13 @@
                      ${res[i].roles.map(role => `<span style="margin-left: 5px;">${role.name.replace("ROLE_", "")}</span>`)}
                     </td>
                     <td>
-                     <button data-user=${JSON.stringify(res[i])} class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#editModalCenter"
+                     <button data-user=${JSON.stringify(res[i], replaceSpace)} class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#editModalCenter"
                         onclick=getCurrentUser()>
                         Edit
                      </button>
                     </td>
                     <td>
-                        <button data-user=${JSON.stringify(res[i])} class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModalCenter"
+                        <button data-user=${JSON.stringify(res[i], replaceSpace)} class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteModalCenter"
                         onclick=deleteCurrentUser()>Delete</button>
                     </td>
                     </tr>`
@@ -69,7 +83,7 @@
         }
 
         function getCurrentUser() {
-            const user = JSON.parse(this.event.currentTarget.getAttribute("data-user"))
+            const user = JSON.parse(this.event.currentTarget.getAttribute("data-user"), replacer)
             const myModal = document.getElementById("editModalCenter");
             fillForm(myModal, user)
             const currForm = document.getElementById("editForm")
@@ -102,7 +116,7 @@
         }
 
         function deleteCurrentUser() {
-            const user = JSON.parse(this.event.currentTarget.getAttribute("data-user"))
+            const user = JSON.parse(this.event.currentTarget.getAttribute("data-user"), replacer)
             const myModal = document.getElementById("deleteModalCenter");
             fillForm(myModal, user)
             const currForm = document.getElementById("deleteForm")
@@ -117,8 +131,39 @@
             })
         }
 
+        function createUser() {
+            const currForm = document.getElementById("createForm");
+            currForm.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const collection = currForm.querySelectorAll("input")
+                const data = {
+                    roles: []
+                };
+                for (let i = 0; i <= collection.length; i++) {
+                    const name = collection[i]?.name
+                    if (name) {
+                        if (name !== "role") {
+                            data[name] = collection[i].value;
+                        } else {
+                            if (collection[i].checked) {
+                                data["roles"] = [...data["roles"], collection[i].value]
+                            }
+                        }
+                    }
+                }
+                fetch(baseUrl, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify(data),
+                }).then((res) => {
+                    fetchAllUsers()
+                })
+            })
+        }
+
         function fillForm(form, data) {
             form.addEventListener("shown.bs.modal", function (event) {
+                console.log(data);
                 const allInputs = form.querySelectorAll("input");
                 for (let i = 0; i < allInputs.length; i++) {
                     const id = allInputs[i].getAttribute("id");

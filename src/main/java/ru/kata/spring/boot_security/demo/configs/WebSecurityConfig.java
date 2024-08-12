@@ -15,6 +15,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private final String USER_ROLE = "USER";
+    private final String ADMIN_ROLE = "ADMIN";
+
     private final AuthenticationSuccessHandler successUserHandler;
     private final UserDetailsService userDetailsServiceImpl;
 
@@ -29,8 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/user").hasAnyRole(this.USER_ROLE, this.ADMIN_ROLE)
+                .antMatchers("/admin").hasRole(this.ADMIN_ROLE)
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)

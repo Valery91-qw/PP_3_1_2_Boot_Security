@@ -95,7 +95,7 @@ public class User implements UserDetails {
       List<GrantedAuthority> roles = new ArrayList<>();
       List<Role> userRoles = this.getRoles();
 
-      for (Role userRole : userRoles) {
+      for (var userRole : userRoles) {
          roles.add(new SimpleGrantedAuthority(userRole.getName()));
       }
 
